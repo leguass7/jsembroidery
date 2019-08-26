@@ -32,6 +32,6 @@
     "should": "^13.2.3"
   },
   "dependencies": {
-    "is-valid-path": "^0.1.1"
+    "lodash": "^4.17.15"
   }
 }
