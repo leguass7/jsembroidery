@@ -2,7 +2,7 @@
   "name": "jsembroidery",
   "version": "0.0.1",
   "description": "Javascript library for the reading and writing of embroidery files.",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "mocha --reporter spec --timeout 10000 test/tests.js"
   },
@@ -27,12 +27,9 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^9.2.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "mocha": "^6.2.2",
-    "should": "^13.2.3"
+    "eslint-plugin-standard": "^4.0.1"
   },
   "dependencies": {
-    "acorn": ">=7.1.1",
     "lodash": "^4.17.15"
   }
 }
