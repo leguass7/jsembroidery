@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": false,
+    "files.associations": {
+      "*.js": "javascriptreact",
+      "*.jsx": "javascriptreact"
+    },
+    "editor.rulers": [120],
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.fixAll.tslint": true,
+      "source.fixAll.stylelint": true
+    }
+  }
