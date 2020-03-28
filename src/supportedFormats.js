@@ -1,9 +1,21 @@
-import * as PesWriter from './PesWriter';
-import * as PesReader from './PesReader';
-import DstWriter from './DstWriter';
+import * as PesWriter from './writer/PesWriter';
+import * as PesReader from './reader/PesReader';
+import * as DstWriter from './writer/DstWriter';
+import * as DstReader from './reader/DstReader';
+
+/** @typedef {Object}  ISupported
+ *  @property {String} description
+ *  @property {String} extension
+ *  @property {String} mimetype
+ *  @property {String} category
+ *  @property {Object} reader
+ *  @property {Object} writer
+ *  @property {Array<Number>} versions
+ *  @property {Array<String>} metadata
+ */
 
 /**
- * @constant {Array} supportedFormats
+ * @constant {Array<ISupported>} supportedFormats
  */
 export const supportedFormats = [
   {
@@ -23,7 +35,7 @@ export const supportedFormats = [
     extensions: ['dst'],
     mimetype: 'application/x-dst',
     category: 'embroidery',
-    // reader: DstReader,
+    reader: DstReader,
     writer: DstWriter,
     read_options: {
       trim_distance: [null, 3.0, 50.0],
@@ -37,3 +49,18 @@ export const supportedFormats = [
     metadata: ['name', 'author', 'copyright'],
   },
 ];
+
+/**
+ * @function getSupportedFormats
+ * @param {String} extension
+ * @return {ISupported}
+ */
+export function getSupportedFormats(extension) {
+  for (let i = 0; i < supportedFormats.length; i++) {
+    const supported = supportedFormats[i];
+    if (extension === supported.extension) {
+      return supported;
+    }
+  }
+  return false;
+}

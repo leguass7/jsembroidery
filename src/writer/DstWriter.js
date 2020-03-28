@@ -1,4 +1,4 @@
-import { JUMP, CONTINGENCY_SEQUIN_UTILIZE } from './EmbConstant';
+import { JUMP, CONTINGENCY_SEQUIN_UTILIZE } from '../EmbConstant';
 
 const SEQUIN_CONTINGENCY = CONTINGENCY_SEQUIN_UTILIZE;
 const FULL_JUMP = False;

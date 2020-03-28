@@ -6,13 +6,25 @@ export function bytearray(bytable) {
   if (aType === 'number') return new Uint8Array(bytable);
 
   if (aType === 'string') {
-    const len = bytable.length;
-    const aBytes = new Uint8Array(len);
-    for (let i = 0; i < len; i++) {
+    const size = bytable.length;
+    const aBytes = new Uint8Array(size);
+    for (let i = 0; i < size; i++) {
       aBytes[i] = bytable.charCodeAt(i);
     }
     return aBytes;
   }
 
   throw 'Error: py.js bytearray';
+}
+
+export function isStr(value) {
+  return !!(typeof value === 'string');
+}
+
+export function len(value) {
+  return value ? value.length : 0;
+}
+
+export function isInstance(value, Instance) {
+  return !!(value instanceof Instance);
 }
