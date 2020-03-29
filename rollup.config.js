@@ -45,14 +45,15 @@ export default {
     typescript({
       tsconfigOverride: {
         compilerOptions: {
-          declarationDir: './typings',
+          declarationDir: pkg.typings,
           declarationMap: true,
         },
-        include: ['./src/**/*'],
+        include: ['./src'],
+        exclude: ['**/__tests__'],
       },
       rollupCommonJSResolveHack: true,
       useTsconfigDeclarationDir: true,
-      objectHashIgnoreUnknownHack: true,
+      objectHashIgnoreUnknownHack: false,
     }),
     commonjs(),
     terser({
