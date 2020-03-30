@@ -41,6 +41,7 @@ export default {
     resolve(),
     babel({
       exclude: 'node_modules/**',
+      presets: [['@babel/preset-env', { modules: false }]],
     }),
     typescript({
       tsconfigOverride: {
@@ -48,7 +49,7 @@ export default {
           declarationDir: pkg.typings,
           declarationMap: true,
         },
-        include: ['./src'],
+        include: ['**/*.js'],
         exclude: ['**/__tests__'],
       },
       rollupCommonJSResolveHack: true,

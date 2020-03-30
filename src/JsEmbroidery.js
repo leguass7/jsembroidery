@@ -1,9 +1,8 @@
-// import fs from 'fs';
-import { isStr } from './utils/py';
+import fs from 'fs';
+import { isStr, hexToAlphaNumeric } from './utils/py';
 import { getSupportedFormats } from './supportedFormats';
 import EmbPattern from './EmbPattern';
-
-const fs = require('fs');
+// const fs = require('fs');
 
 /**
  * Extracts the extension from a filename
@@ -21,7 +20,7 @@ export async function readEmbroidery(reader, f, settings, pattern) {
 
   if (isStr(f)) {
     const textMode = reader.READ_FILE_IN_TEXT_MODE || false;
-    let stream = false;
+    // let stream = false;
     if (textMode) {
       // try text as stream
       // stream = fs.createReadStream(f);
@@ -29,14 +28,17 @@ export async function readEmbroidery(reader, f, settings, pattern) {
       // try open file as stream
       // stream = fs.createReadStream(f);
     }
-    stream = await fs.readFileSync(f);
-    // stream = fs.createReadStream(f);
-    // stream.on('data', (data) => {
-    //   reader.read(data, pattern, settings);
-    //   stream.close();
-    // });
+    // const stream = await fs.readFileSync(f);
+    const stream = await fs.createReadStream(f);
+    stream.on('data', (data) => {
+      console.log('stream 1', hexToAlphaNumeric(data, true));
+    });
+    // fs.createReadStream().read()
+    // console.log('stream', stream.read(512));
+    await reader.read(stream, pattern, settings);
+    return pattern;
   }
-  reader.read(f, pattern, settings);
+  await reader.read(f, pattern, settings);
   return pattern;
 }
 
@@ -48,38 +50,3 @@ export async function read(filename, settings, pattern) {
   await readEmbroidery(reader, filename, settings, pattern);
   return pattern;
 }
-
-// def read_embroidery(reader, f, settings=None, pattern=None):
-//     """Reads fileobject or filename with reader."""
-//     if reader is None:
-//         return None
-//     if pattern is None:
-//         pattern = EmbPattern()
-
-//     if is_str(f):
-//         text_mode = False
-//         try:
-//             text_mode = reader.READ_FILE_IN_TEXT_MODE
-//         except AttributeError:
-//             pass
-//         if text_mode:
-//             try:
-//                 with open(f, "r") as stream:
-//                     reader.read(stream, pattern, settings)
-//                     stream.close()
-//             except IOError:
-//                 pass
-//         else:
-//             try:
-//                 with open(f, "rb") as stream:
-//                     reader.read(stream, pattern, settings)
-//                     stream.close()
-//             except IOError:
-//                 pass
-//     else:
-//         reader.read(f, pattern, settings)
-//     return pattern
-
-/**
- *
- */

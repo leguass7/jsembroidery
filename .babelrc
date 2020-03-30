@@ -1,7 +1,9 @@
 {
   "presets": [
     ["@babel/preset-env", {
-      "modules": false
-    }]
+      "modules": "commonjs"
+    }],
+    "jest",
+    "@babel/preset-typescript"
   ]
 }
