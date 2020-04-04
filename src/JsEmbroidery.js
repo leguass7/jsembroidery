@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { isStr, hexToAlphaNumeric } from './utils/py';
+import { isStr, humanRead } from './utils/py';
 import { getSupportedFormats } from './supportedFormats';
 import EmbPattern from './EmbPattern';
 // const fs = require('fs');
@@ -29,13 +29,29 @@ export async function readEmbroidery(reader, f, settings, pattern) {
       // stream = fs.createReadStream(f);
     }
     // const stream = await fs.readFileSync(f);
-    const stream = await fs.createReadStream(f);
-    stream.on('data', (data) => {
-      console.log('stream 1', hexToAlphaNumeric(data, true));
+    // console.log('stream 1', hexToAlphaNumeric(stream, true));
+    const readable = await fs.createReadStream(f);
+    readable.on('data', (data) => {
+      // console.log('D: ', humanRead(data));
+      //   readable.destroy();
+      //   humanRead(data, true);
+    });
+
+    // console.log('------------------', readable.read(512));
+
+    // console.log('readable', readable);
+
+    readable.on('readable', () => {
+      const header = readable.read(32);
+      console.log('HEADER: ', humanRead(header));
+      const d3 = readable.read(32);
+      console.log('DATA: ', humanRead(d3));
+      readable.destroy();
     });
     // fs.createReadStream().read()
     // console.log('stream', stream.read(512));
-    await reader.read(stream, pattern, settings);
+
+    // await reader.read(stream, pattern, settings);
     return pattern;
   }
   await reader.read(f, pattern, settings);

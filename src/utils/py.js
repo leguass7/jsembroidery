@@ -1,11 +1,13 @@
 import fs from 'fs';
 import chunk from 'chunk';
+import { range } from 'pythonic';
 
 /* eslint-disable no-throw-literal */
 export function bytearray(bytable) {
   if (typeof bytable === 'undefined') return new Uint8Array(0);
 
   const aType = typeof bytable;
+
   if (aType === 'number') return new Uint8Array(bytable);
 
   if (aType === 'string') {
@@ -32,6 +34,18 @@ export function isInstance(value, Instance) {
   return !!(value instanceof Instance);
 }
 
+/**
+ * Force any values an array
+ * @function toArray
+ * @param {any} value
+ * @returns {Array}
+ * @example
+ * forceArray('1') // return ['1']
+ */
+export function forceArray(value) {
+  if (!value) return [];
+  return !Array.isArray(value) ? [value] : value;
+}
 // export function range(start, stop, step) {
 //   if (stop === undefined) {
 //     stop = start;
@@ -50,7 +64,23 @@ export function isInstance(value, Instance) {
 //   return result;
 // }
 
-export function* range(start, stop, step = 1) {
+export function arrayRange(start, stop, step = 1) {
+  if (stop === undefined) start = stop;
+  const condition = (v) => {
+    if (step > 0) return !!(v <= stop);
+    if (step < 0) return !!(v >= stop);
+    return false;
+  };
+
+  const result = [start];
+  while (condition(start)) {
+    start += step;
+    result.push(start);
+  }
+  return result;
+}
+
+export function* range1(start, stop, step = 1) {
   if (stop === undefined) [start, stop] = [0, start];
   if (step > 0) while (start < stop) yield start, (start += step);
   else if (step < 0) while (start > stop) yield start, (start += step);
@@ -83,6 +113,35 @@ export function hexToInt(strhex) {
     console.log('utils hexToInt', error.code);
     return 0;
   }
+}
+
+export function humanRead(hexInt) {
+  if (isInstance(hexInt, Buffer)) {
+    console.log('buffer', hexInt.length);
+    const arr = chunk(hexInt.toString('hex').toUpperCase(), 2);
+    return humanRead(arr);
+  }
+
+  console.log(`${typeof hexInt}:`, hexInt.length);
+  const result = forceArray(hexInt).map((hex) => {
+    const num = hexToInt(hex);
+    const letter = arrayRange(32, 126, 1);
+
+    // if ([0].indexOf(num) >= 0) return `[NULL]`;
+    // if ([32].indexOf(num) >= 0) return `[SPACE]`;
+    // if ([9].indexOf(num) >= 0) return `[TAB]`;
+
+    if (letter.indexOf(num) >= 0) {
+      // console.log('num', num);
+      return String.fromCharCode(num);
+    }
+    if ([10, 13].indexOf(num) >= 0) return `\n`;
+    return `[${hex}]`;
+  });
+
+  const filtro = result.filter((i) => !!i).join('');
+  // console.log('result: ', filtro);
+  return filtro;
 }
 /**
  * Converte Hexadecimal em Alphanumeric String
